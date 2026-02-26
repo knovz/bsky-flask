@@ -8,5 +8,24 @@
 {% endblock %}
 
 {% block content %}
-TIMELINE
+{% for feed_view in feed %}
+<article class="post">
+    <header>
+        <div>
+            <h1>{{ feed_view.post.author.display_name }}</h1>
+        </div>
+        {% if g.user %}
+        <a class="action" href="">Reply</a>
+        {% endif %}
+    </header>
+    <p class="body">{{ feed_view.post.record.text }}</p>
+</article>
+<hr>
+{% endfor%}
+<footer>
+    <a href="?cursor=''">Home</a>
+    {% if cursor %}
+    <a href="?cursor={{ cursor }}">Next</a>
+    {% endif%}
+</footer>
 {% endblock %}

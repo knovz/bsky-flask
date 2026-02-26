@@ -62,7 +62,7 @@ def load_logged_in_user():
 
     if user is None:
         g.user = None
-        g.bsky = None
+        g.pop("bsky", None)
     else:
         g.user = user
         bsky = Client()
