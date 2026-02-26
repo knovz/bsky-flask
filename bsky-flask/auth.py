@@ -20,6 +20,10 @@ bp = Blueprint("auth", __name__, url_prefix="/auth")
 
 @bp.route("/login", methods=("GET", "POST"))
 def login():
+    """
+    Present login form if GET.
+    Login with Bsky credentials if POST.
+    """
     if request.method == "POST":
         # We'll try to login with bluesky credentials
         username = request.form["username"]
@@ -46,7 +50,10 @@ def login():
 
 @bp.before_app_request
 def load_logged_in_user():
-    """bp.before_app_request register the function to run before any view function, at each request"""
+    """
+    bp.before_app_request register the function to run before any view function,
+    at each request
+    """
     user = session.get("user")
 
     if user is None:
@@ -61,6 +68,7 @@ def load_logged_in_user():
 
 @bp.route("/logout")
 def logout():
+    """logout, clear session"""
     session.clear()
     return redirect(url_for("index"))
 
