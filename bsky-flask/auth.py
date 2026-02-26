@@ -34,8 +34,11 @@ def login():
         )
         # TODO handle errors
         session.clear()
-        session["user_id"] = profile_view.handle
-        # persist client or tokens
+        session["user"] = {
+            "handle": profile_view.handle,
+            "display_name": profile_view.display_name,
+        }
+        session["bsky"] = bsky.export_session_string()
         return redirect(url_for("index"))
 
     return render_template("auth/login.html")
@@ -44,12 +47,16 @@ def login():
 @bp.before_app_request
 def load_logged_in_user():
     """bp.before_app_request register the function to run before any view function, at each request"""
-    user_id = session.get("user_id")
+    user = session.get("user")
 
-    if user_id is None:
+    if user is None:
         g.user = None
+        g.bsky = None
     else:
-        g.user = {"id": user_id}
+        g.user = user
+        bsky = Client()
+        bsky.login(session_string=session["bsky"])
+        g.bsky = bsky
 
 
 @bp.route("/logout")
