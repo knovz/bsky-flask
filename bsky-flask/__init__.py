@@ -10,9 +10,13 @@ def create_app(test_config=None):
     # Here we can add configuration
     # For example a DATABASE, SECRET_KEY or whatever
     # We will start with no DB
+    app.config.from_mapping(
+        SECRET_KEY="dev-key-please-overwrite",
+    )
 
     if test_config is None:
         # Load instance config, if exists
+        # It should overwrite the SECRET_KEY
         app.config.from_pyfile("config.py", silent=True)
     else:
         # Load the test config passed on
