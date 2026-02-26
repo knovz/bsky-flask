@@ -2,6 +2,9 @@ import os
 
 from flask import Flask
 
+from . import auth
+from . import views
+
 
 def create_app(test_config=None):
     """Factory. Create and configure the app."""
@@ -31,6 +34,10 @@ def create_app(test_config=None):
     @app.route("/hello")
     def hello():
         return "BSKY-FLASK app is running"
+
+    app.register_blueprint(auth.bp)
+    app.register_blueprint(views.bp)
+    app.add_url_rule("/", endpoint="index")
 
     # This is a factory, return the app
     return app
