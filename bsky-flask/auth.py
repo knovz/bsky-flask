@@ -14,6 +14,7 @@ from flask import (
     current_app,
 )
 from atproto import Client
+from atproto import exceptions
 
 bp = Blueprint("auth", __name__, url_prefix="/auth")
 
@@ -30,20 +31,23 @@ def login():
         password = request.form["password"]
 
         bsky = Client()
-        profile_view = bsky.login(username, password)
-        current_app.logger.info(
-            "Logged in as %s (@%s)",
-            profile_view.display_name,
-            profile_view.handle,
-        )
-        # TODO handle errors
-        session.clear()
-        session["user"] = {
-            "handle": profile_view.handle,
-            "display_name": profile_view.display_name,
-        }
-        session["bsky"] = bsky.export_session_string()
-        return redirect(url_for("index"))
+        try:
+            profile_view = bsky.login(username, password)
+            current_app.logger.info(
+                "Logged in as %s (@%s)",
+                profile_view.display_name,
+                profile_view.handle,
+            )
+            session.clear()
+            session["user"] = {
+                "handle": profile_view.handle,
+                "display_name": profile_view.display_name,
+            }
+            session["bsky"] = bsky.export_session_string()
+            return redirect(url_for("index"))
+        except exceptions.UnauthorizedError as ue:
+            current_app.logger.error("Unauthorized. %s", ue)
+            flash(f"{ue.response.status_code} - {ue.response.content.message}")
 
     return render_template("auth/login.html")
 
