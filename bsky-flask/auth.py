@@ -65,9 +65,24 @@ def load_logged_in_user():
         g.pop("bsky", None)
     else:
         g.user = user
-        bsky = Client()
-        bsky.login(session_string=session["bsky"])
-        g.bsky = bsky
+        try:
+            bsky = Client()
+            bsky.login(session_string=session["bsky"])
+            g.bsky = bsky
+            return
+        except exceptions.BadRequestError as e:
+            current_app.logger.error("Bad request. %s", e)
+            flash(f"{e.response.status_code} - {e.response.content.message}")
+        except exceptions.UnauthorizedError as e:
+            current_app.logger.error("Unauthorized. %s", e)
+            flash(f"{e.response.status_code} - {e.response.content.message}")
+        # clear user from session
+        session.pop("user", None)
+        session.pop("bsky", None)
+        g.user = None
+        g.pop("bsky", None)
+        # Maybe redirect to login? There was a user logged in...
+        return redirect(url_for("auth.login"))
 
 
 @bp.route("/logout")
