@@ -14,7 +14,7 @@ bp = Blueprint("views", __name__)  # No prefix, this is the root
 # Is there an "open" timeline? Or @login_required?
 @bp.route("/")
 def index():
-    cursor = request.args.get("cursor", "", type="str")
+    cursor = str(request.args.get("cursor", ""))
     current_app.logger.info("cursor: %s", cursor)
     # We could manage the cursor in session
     # But this makes it more consistent to move to REST API
