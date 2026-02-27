@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Blsky-Flask: Flask debug",
+            "name": "bsky-flask Python Debugger",
             "type": "debugpy",
             "request": "launch",
             "module": "flask",
@@ -15,9 +15,12 @@
             },
             "args": [
                 "run",
+                "--no-debugger",
+                "--no-reload"
             ],
             "jinja": true,
-            "autoStartBrowser": false
-        }
+            "autoStartBrowser": false,
+            "justMyCode": true
+        },
     ]
 }
