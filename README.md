@@ -1,2 +1,2 @@
-# bsky-flask
+# bskyflask
 Learning python, flask and atproto

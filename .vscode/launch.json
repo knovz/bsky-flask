@@ -10,7 +10,7 @@
             "request": "launch",
             "module": "flask",
             "env": {
-                "FLASK_APP": "bsky-flask/__init__.py",
+                "FLASK_APP": "bskyflask/__init__.py",
                 "FLASK_DEBUG": "1"
             },
             "args": [
