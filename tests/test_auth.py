@@ -2,7 +2,7 @@ import pytest
 from flask import session
 
 
-def test_login(client, auth, app):
+def test_login(client, auth):
     """
     GET returns user form
     POST (via auth) redirects to index and stores user and bsky in session
