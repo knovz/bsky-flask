@@ -47,7 +47,9 @@ def login():
             return redirect(url_for("index"))
         except exceptions.UnauthorizedError as ue:
             current_app.logger.error("Unauthorized. %s", ue)
-            flash(f"{ue.response.status_code} - {ue.response.content.message}")
+            flash(
+                f"Login error: {ue.response.status_code} - {ue.response.content.message}"
+            )
 
     return render_template("auth/login.html")
 
